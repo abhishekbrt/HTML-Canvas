@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 Canvas</title>
+</head>
+
+<body>
+    <canvas class="draw" width="800" height="800"> </canvas>
+
+
+    <script>
+        console.log('hello world');
+        const canvas = document.querySelector('.draw');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.lineWidth = 100;
+
+        let isDrawing = false;
+        let x = 0;
+        let y = 0;
+        let hue = 0;
+        let direction = true;
+
+
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            x = e.offsetX;
+            y = e.offsetY;
+
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDrawing) {
+                drawLine(ctx, x, y, e.offsetX, e.offsetY);
+                x = e.offsetX;
+                y = e.offsetY;
+            }
+        });
+
+        window.addEventListener('mouseup', (e) => {
+            if (isDrawing) {
+                // drawLine(ctx, x, y, e.offsetX, e.offsetY);
+                // x = 0;
+                // y = 0;
+                isDrawing = false;
+            }
+
+        });
+
+        // canvas.addEventListener('mouseout',() => isDrawing=false);
+
+
+
+        function drawLine(ctx, x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.strokeStyle = `hsl(${hue},100%,50%)`;
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.closePath();
+            hue++;
+            if (hue >= 360) {
+                hue = 0;
+            }
+            //adjusting line width 
+            if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+                direction = !direction;
+            }
+
+            if (direction) {
+                ctx.lineWidth++;
+            }
+            else {
+                ctx.lineWidth--;
+            }
+        }
+    </script>
+
+    <style>
+        html body {
+            margin: 0;
+        }
+    </style>
+
+</body>
+
+</html>
